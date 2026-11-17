@@ -13,6 +13,38 @@ This project syncs Garmin data into a local database and renders health, sleep, 
 - dashboard-first experience using Streamlit
 - modular structure for future health metrics and chart additions
 
+## Quick start
+
+```bash
+git clone https://github.com/KANSHUMAN42/Garmin-Dashboard.git
+cd Garmin-Dashboard
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Run the dashboard
+
+From the repo root:
+
+```bash
+streamlit run app.py
+```
+
+This will start the dashboard locally in your browser, usually at:
+
+```text
+http://localhost:8501
+```
+
+## Refresh Garmin data locally
+
+```bash
+python sync.py
+```
+
+This syncs Garmin data into the local SQLite database so the dashboard reads from local storage instead of calling the Garmin API on each page load.
+
 ## Project structure
 
 ```text
