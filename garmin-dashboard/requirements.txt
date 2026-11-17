@@ -1,0 +1,4 @@
+garminconnect
+streamlit
+plotly
+pandas
