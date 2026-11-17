@@ -1,58 +1,98 @@
 # Garmin Dashboard
 
-This project is a local-first Garmin dashboard built with Python, Streamlit, and SQLite.
+A local-first Garmin dashboard built with Python, Streamlit, and SQLite.
+
+This project syncs Garmin data into a local database and renders health, sleep, workout, and recovery insights in a clean dashboard view. It is designed to avoid repeated Garmin API calls during normal dashboard use by storing the data locally and reading from SQLite.
+
+## Features
+
+- local SQLite storage for Garmin metrics
+- daily steps and resting heart rate tracking
+- workout summaries and activity trends
+- sleep and recovery data visualization
+- dashboard-first experience using Streamlit
+- modular structure for future health metrics and chart additions
 
 ## Project structure
 
 ```text
-garmin-dashboard/
-├── app.py                     # entry point for the app
-├── sync.py                    # manual Garmin sync script
+.
+├── app.py                     # app entry point
+├── sync.py                    # Garmin sync script
+├── README.md                  # project overview
 ├── requirements.txt           # Python dependencies
-├── garmin.db                  # local SQLite database
+├── LICENSE                    # MIT license
+├── CONTRIBUTING.md            # contribution guide
 ├── dao/
-│   ├── __init__.py            # DAO exports
-│   └── database.py           # SQLite connection and schema setup
+│   ├── __init__.py
+│   └── database.py            # DB schema and connection setup
 ├── services/
-│   ├── __init__.py           # service exports
-│   └── data_service.py       # loaded data and DB access logic
+│   ├── __init__.py
+│   └── data_service.py        # data loading and shaping logic
 ├── dashboard/
-│   ├── __init__.py           # dashboard package
-│   ├── app.py                # dashboard UI and layout
-│   └── charts.py             # reusable chart generation functions
-└── README.md
+│   ├── __init__.py
+│   ├── app.py                 # dashboard UI layout
+│   └── charts.py              # chart generation functions
+└── garmin.db                  # local SQLite data store
 ```
 
 ## How it works
 
-1. `sync.py` pulls data from Garmin and stores it in the local SQLite database.
-2. `dao/database.py` owns the database connection and schema.
-3. `services/data_service.py` reads the DB and returns the data needed by the dashboard.
-4. `dashboard/app.py` renders the dashboard UI.
-5. `dashboard/charts.py` builds all visualizations.
+1. `sync.py` connects to Garmin and stores new data in the local SQLite database.
+2. `dao/database.py` owns the database schema and connection.
+3. `services/data_service.py` loads the relevant tables and prepares dashboard data.
+4. `dashboard/app.py` renders the dashboard.
+5. `dashboard/charts.py` creates the visualizations.
 
-## Why this architecture
-
-This structure separates responsibilities:
-
-- DAO layer: database access and schema management
-- Service layer: business/data preparation logic
-- Dashboard layer: UI + visual rendering
-
-This keeps the app easier to extend when you add more health metrics or charts later.
-
-## Run locally
+## Local setup
 
 ```bash
-cd garmin-dashboard
-python -m streamlit run app.py
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-## Refresh data locally
+## Garmin login and sync
+
+To fetch fresh Garmin data, run:
 
 ```bash
-cd garmin-dashboard
 python sync.py
 ```
 
-This script fetches fresh Garmin data and stores it in `garmin.db`.
+If you have not logged in before, the script will ask for Garmin credentials in the terminal. You can also provide them in the environment:
+
+```bash
+export GARMIN_EMAIL="your_email@example.com"
+export GARMIN_PASSWORD="your_password"
+```
+
+Then run:
+
+```bash
+python sync.py
+```
+
+## Run the dashboard
+
+```bash
+streamlit run app.py
+```
+
+## Why this architecture
+
+This project separates responsibilities into layers:
+
+- DAO layer: database access and schema management
+- Service layer: data preparation and local queries
+- Dashboard layer: UI and charts
+
+That keeps the app easier to extend as you add more health, training, and recovery metrics.
+
+## Contributing
+
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
