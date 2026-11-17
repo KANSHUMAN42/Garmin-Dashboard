@@ -41,7 +41,7 @@ Open the app here: http://localhost:8503
 
 ## Dashboard preview
 
-![Garmin dashboard preview](docs/dashboard-preview.png)
+![Garmin dashboard preview](docs/dashboard-preview-chart-only.png)
 
 ## Refresh Garmin data locally
 
