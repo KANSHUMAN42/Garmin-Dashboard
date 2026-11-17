@@ -60,6 +60,48 @@ def build_rhr_chart(daily: pd.DataFrame):
     return fig
 
 
+def build_stress_chart(stress_df: pd.DataFrame):
+    if stress_df is None or stress_df.empty:
+        return empty_chart("Stress trend", "No stress data available yet.")
+
+    needed = {"day", "avg_stress", "stress_duration"}
+    if not needed.issubset(stress_df.columns):
+        return empty_chart("Stress trend", "Stress data is not available in the current database.")
+
+    chart_df = stress_df[["day", "avg_stress", "stress_duration"]].copy()
+    fig = px.line(chart_df, x="day", y="avg_stress", markers=True, title="Stress trend")
+    fig.update_layout(xaxis_title="Day", yaxis_title="Stress score", template="plotly_white")
+    fig.add_scatter(x=chart_df["day"], y=chart_df["stress_duration"] / 3600, mode="lines+markers", name="Stress hours")
+    return fig
+
+
+def build_activity_trend_chart(activity_df: pd.DataFrame, view: str = "daily"):
+    if activity_df is None or activity_df.empty:
+        return empty_chart("Activity trend", "No activity data available yet.")
+
+    if view == "hourly":
+        if "hourly_activity_minutes" not in activity_df.columns:
+            return empty_chart("Hourly activity", "Hourly estimate is unavailable for the current dataset.")
+        chart_df = activity_df[["hour", "hourly_activity_minutes"]].copy().dropna()
+        if chart_df.empty:
+            return empty_chart("Hourly activity")
+        fig = px.line(chart_df, x="hour", y="hourly_activity_minutes", markers=True, title="Estimated hourly activity")
+        fig.update_layout(xaxis_title="Hour of day", yaxis_title="Active minutes", template="plotly_white")
+        return fig
+
+    needed = {"day", "active_minutes"}
+    if not needed.issubset(activity_df.columns):
+        return empty_chart("Activity trend", "Activity data is not available in the current database.")
+
+    chart_df = activity_df[["day", "active_minutes"]].copy().dropna()
+    if chart_df.empty:
+        return empty_chart("Activity trend")
+
+    fig = px.bar(chart_df, x="day", y="active_minutes", title="Daily activity trend")
+    fig.update_layout(xaxis_title="Day", yaxis_title="Active minutes", template="plotly_white")
+    return fig
+
+
 def build_activity_week_chart(acts: pd.DataFrame):
     if acts.empty or "minutes" not in acts.columns:
         return empty_chart("Exercise minutes per week")
