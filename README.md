@@ -31,11 +31,17 @@ From the repo root:
 streamlit run app.py
 ```
 
-This will start the dashboard locally in your browser, usually at:
+This will start the dashboard locally in your browser at:
 
 ```text
-http://localhost:8501
+http://localhost:8503
 ```
+
+Open the app here: http://localhost:8503
+
+## Dashboard preview
+
+![Garmin dashboard preview](docs/dashboard-preview.png)
 
 ## Refresh Garmin data locally
 
